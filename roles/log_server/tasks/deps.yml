@@ -1,0 +1,6 @@
+---
+  
+- name: Install pwgen
+  yum:
+    name=pwgen
+    state=present  

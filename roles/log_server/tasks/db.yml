@@ -1,0 +1,3 @@
+---
+- name: Add mongodb users/pass
+  mongodb_user: database={{ mongodb }} name={{ mongodb_user }} password={{ mongodb_pass }} state=present

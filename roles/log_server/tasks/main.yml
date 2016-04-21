@@ -1,0 +1,8 @@
+---   
+- include: deps.yml
+- include: password.yml
+- include: db.yml
+- include: elasticSearchConf.yml
+- include: grayLogServerConf.yml
+- include: grayLogWebConf.yml
+- include: service.yml

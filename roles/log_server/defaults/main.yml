@@ -1,0 +1,27 @@
+---
+mongodb_user: graylog
+mongodb_pass: graylogp
+mongodb: graylog
+
+elasticsearch_version: 1.6.0
+elasticsearch_nexusPath: /fakepath/elasticsearch/
+elasticsearch_package: elasticsearch-1.6.0.tar.gz
+elasticsearch_url: "https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.6.0.tar.gz"
+
+elasticsearch_servicewrapper_package_path: /fakepath/elasticsearch_servicewrapper/1.0.0/elasticsearch_servicewrapper-1.0.0.tar.gz
+elasticsearch_servicewrapper_url: "http://github.com/elasticsearch/elasticsearch-servicewrapper/tarball/master"
+
+graylog_server_version: 1.1.3
+graylog_server_nexusPath: /fakepath/graylog_server/
+graylog_server_packageName: graylog_server-1.1.3.tgz
+graylog_server_url: "https://packages.graylog2.org/releases/graylog2-server/graylog-1.1.3.tgz?__hstc=151246182.65a284e9dd60667e71a6bcfb3ba8e034.1437672193715.1439993989250.1440533223999.14&__hssc=151246182.3.1440533223999&__hsfp=4187697555"
+graylog_server_file: graylog_server.tgz
+
+graylog_web_version: 1.1.3
+graylog_web_nexusPath: /fakepath/graylog_web/
+graylog_web_packageName: graylog_web-1.1.3.tgz
+graylog_web_url: "https://packages.graylog2.org/releases/graylog2-web-interface/graylog-web-interface-1.1.3.tgz?__hstc=151246182.65a284e9dd60667e71a6bcfb3ba8e034.1437672193715.1439993989250.1440533223999.14&__hssc=151246182.5.1440533223999&__hsfp=4187697555"
+graylog_web_file: graylog_web.tgz
+
+# Nexus variables
+nexusPath: /nexus/service/local/repositories/releases/content

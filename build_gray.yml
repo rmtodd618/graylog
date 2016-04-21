@@ -1,0 +1,76 @@
+---
+- name: Create regional Docker infrastructure
+  hosts: localhost
+  connection: local
+  vars:
+    group_name: 'LOG'
+    vm_specs:
+      cpu: 2
+      memory: 2
+      dist: centos-6-64
+      acct_alias: CSTS(CHANGEIT)
+      vm_name: GRAY
+    loc:
+      UC1:
+        region: US
+  tasks:
+    - name: Create UC1 Dock group
+      clc_group:
+        name: "{{ group_name }}"
+        location: UC1
+        state: present
+
+
+
+    - name: Build VM in UC1
+      clc_server:
+        name: "{{ vm_specs.vm_name }}"
+        template: "{{ vm_specs.dist }}"
+        password: "{{ lookup('env', 'CLC_SERVER_PASSWORD') }}"
+        group: "{{ group_name }}"
+        count: 1
+        #exact_count: 1
+        #count_group: "{{ group_name }}"
+        cpu: "{{ vm_specs.cpu }}"
+        memory: "{{ vm_specs.memory }}"
+        location: UC1
+        network_id: 9f4c2de99b654c0a95709d3d72214c7a----(CHANGE-Can find in control networks)
+        # type: hyperscale
+        # storage_type: hyperscale
+        alias: "{{ vm_specs.acct_alias }}"
+        #wait: false
+      register: uc1
+
+
+    - name: Wait for SSH to Come up on New Server
+      wait_for: "host={{ item.ipaddress }} port=22 delay=5 timeout=600 state=started"
+      with_flattened:
+        - uc1.servers
+    - name: Update known_hosts With New Server
+      shell: "ssh-keygen -R {{ item.ipaddress }} && ssh-keyscan -t rsa -H {{ item.ipaddress }} >> ~/.ssh/known_hosts"
+      with_flattened:
+        - uc1.servers
+    - name: Create group in memory
+      add_host: "name={{ item.name }} ansible_ssh_host={{ item.ipaddress }} ansible_ssh_user=root ansible_ssh_pass={{ lookup('env', 'CLC_SERVER_PASSWORD') }} groups=gray_hosts region={{ loc[item.locationId].region }} location={{ item.locationId }}"
+      with_flattened:
+        - uc1.servers
+
+- name: Configure SSH Key
+  hosts: gray_hosts
+  remote_user: root
+  tasks:
+  - name: add host ssh key for root to new node
+    authorized_key: user=root key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}" state=present
+
+
+- name: configure DNS server
+  hosts: gray_hosts
+  remote_user: root
+  tasks:
+  - name: Ensure localhost is in /etc/resolv.conf
+    lineinfile: dest=/etc/resolv.conf line='nameserver 10.123.206.17' insertbefore=BOF    -------( change to your own dns server)
+- name: Set up docker containers
+  hosts: gray_hosts
+  vars:
+  roles:
+    - log_server

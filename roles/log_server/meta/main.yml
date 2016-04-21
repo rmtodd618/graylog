@@ -1,0 +1,6 @@
+---
+dependencies:
+# - { role: lb_common, sudo: True }
+ - { role: nexus_ssl, sudo: True }
+ - { role: java }
+ - { role: db_server, sudo: True }

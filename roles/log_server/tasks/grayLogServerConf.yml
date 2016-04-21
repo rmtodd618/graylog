@@ -1,0 +1,35 @@
+---
+- name: Retrieve graylog server
+  command: "wget {{ graylog_server_url }} -O {{ graylog_server_file }}" 
+
+- name: Un-package graylog-server
+  command: "tar xvf {{ graylog_server_file }} -C /opt"
+
+- name: Set symlink for graylog-server
+  file: 
+    src=/opt/graylog-{{ graylog_server_version }}
+    dest=/opt/graylog
+    state=link
+    mode=0644
+    
+- name: Make /etc/graylog/server folder
+  shell: mkdir -p /etc/graylog/server
+  
+- name: Upload server.conf
+  template:
+    src=server.conf.j2
+    dest=/etc/graylog/server/server.conf
+    mode=0644
+    
+- name: Add graylog-server to startup
+  template:
+    src=graylog-server.j2
+    dest=/etc/init.d/graylog-server
+    mode=0755
+    
+- name: Register graylog-server service with init.d
+  command: "chkconfig --add graylog-server"
+  
+- name: Enable graylog-server service on server restart
+  command: "chkconfig graylog-server on"
+  

@@ -1,0 +1,37 @@
+---
+- name: Retrieve graylog web
+  command: "wget {{ graylog_web_url }} -O {{ graylog_web_file }}"  
+  
+- name: Un-package graylog-web
+  command: "tar xvf {{ graylog_web_file }} -C /opt"
+  
+- name: Upload graylog-web-interface-log.xml
+  template:
+    src=graylog-web-interface-log.xml.j2
+    dest=/etc/graylog-web-interface-log.xml
+    mode=0644
+    
+- name: Upload graylog-web init script
+  template:
+    src=graylog-web.j2
+    dest=/etc/init.d/graylog-web
+    mode=0755
+ 
+- name: Set symlink for graylog-web
+  file: 
+    src=/opt/graylog-web-interface-{{ graylog_web_version }}
+    dest=/opt/graylog-web-interface
+    state=link
+    mode=0644
+
+- name: Upload graylog-web conf file
+  template:
+    src=graylog-web-interface.conf.j2
+    dest=/opt/graylog-web-interface/conf/graylog-web-interface.conf
+    mode=0755
+
+- name: Register graylog-web service with init.d
+  command: "chkconfig --add graylog-web"
+
+- name: Enable graylog-web service on server restart
+  command: "chkconfig graylog-web on"

@@ -1,0 +1,18 @@
+---
+- name: Start elasticsearch service
+  service:
+    name=elasticsearch
+    state=restarted
+    enabled=yes
+    
+- name: Start graylog-server service
+  service:
+    name=graylog-server
+    state=restarted
+    enabled=yes    
+  
+- name: Start graylog-web service
+  service: 
+    name=graylog-web
+    state=restarted
+    enabled=yes

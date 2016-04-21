@@ -1,0 +1,34 @@
+---
+- name: Retrieve and unpackage elasticsearch
+  shell: curl -k -L {{ elasticsearch_url }} | tar -xzC /opt
+  
+- name: Set symlink for elasticsearch
+  file: 
+    src=/opt/elasticsearch-{{ elasticsearch_version }}
+    dest=/opt/elasticsearch
+    state=link
+    mode=0644  
+
+- name: Retrieve and unpack elasticsearch servicewrapper
+  shell: curl -k -L {{ elasticsearch_servicewrapper_url }} | tar -xzC /tmp
+
+- name: Copy servicewrapper to /opt/elasticsearch/bin/
+  shell: sudo cp -rf /tmp/*servicewrapper*/service /opt/elasticsearch/bin/
+  
+- name: Remove old servicewrapper directory
+  command: rm -Rf /tmp/*servicewrapper*
+
+- name: Check if elasticsearch is currently installed
+  command: "service elasticsearch status"
+  register: elasticsearch_installed
+  ignore_errors: true
+  
+- name: Install elasticsearch if it's not installed
+  command: "/opt/elasticsearch/bin/service/elasticsearch install"
+  when: elasticsearch_installed.stdout.find("Elasticsearch is running") == -1
+  
+- name: Upload elasticsearch config
+  template:
+    src=elasticsearch.yml.j2
+    dest=/opt/elasticsearch/config/elasticsearch.yml
+    mode=0644

@@ -1,0 +1,8 @@
+---
+- name: Apply log_server role to servers
+  hosts: "{{ env }}_{{ data_center }}_log"
+
+  roles:
+#   - { role: add_server_to_monitor }
+#   - { role: consul_server }
+   - { role: log_server, sudo: True }
