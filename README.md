@@ -17,3 +17,13 @@ export CLC_SERVER_PASSWORD=’SERVER_PASSWORD’
 When using the build.yml make sure to change the (CHANGE OPTIONS TO FIT YOUR NEED) 
 
 ansible-playbook -i clc_inv.py build_gray.yml
+
+
+# logstash help
+I put in logstash folder
+
+#Help tips
+
+
+if you cant get to web
+iptables -A INPUT -p tcp --dport 12201 -s YOUR-IP -j ACCEPT && iptables -A INPUT -p udp --dport 12201 -s YOUR-IP -j ACCEPT

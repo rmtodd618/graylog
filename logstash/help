@@ -1,0 +1,23 @@
+
+Install of service
+cd /opt/
+wget https://download.elastic.co/logstash/logstash/logstash-1.5.3.tar.gz
+tar zxvf logstash-1.5.3.tar.gz
+mkdir logstash
+mv logstash-1.5.3 logstash
+cd logstash
+vi logstash.conf
+/opt/java-app/informant/logs/
+
+bin/logstash -f logstash.conf
+
+
+to get logstash to run as a daemon instead of using screen to let run in background
+
+vi /etc/init.d/logstash
+
+
+adduser --system --disabled-password --no-create-
+usermod -a -G adm logstash
+chown -R logstash:logstash /opt/logstash/bin/logstash
+chmod +x /etc/init.d/logstash
