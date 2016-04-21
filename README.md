@@ -18,6 +18,8 @@ When using the build.yml make sure to change the (CHANGE OPTIONS TO FIT YOUR NEE
 
 ansible-playbook -i clc_inv.py build_gray.yml
 
+cheats for regex commands    http://regexr.com/
+
 
 # logstash help
 I put in logstash folder
